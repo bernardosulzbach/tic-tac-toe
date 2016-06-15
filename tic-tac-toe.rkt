@@ -24,10 +24,6 @@
 (define (derive-games game)
   (derive-games-for-player game (determine-next-to-play game)))
 
-; Returns the first element of a list of empty if the list has no elements.
-(define (first-or-empty lst)
-  (if (empty? lst) lst (car lst)))
-
 ; Checks if the positions a, b, and c of the vector are equal symbols.
 (define (three-equal-symbols? a-vector a b c)
   ; Also check that these are symbols and not something else.
@@ -35,32 +31,35 @@
        (equal? (vector-ref a-vector a) (vector-ref a-vector b))
        (equal? (vector-ref a-vector b) (vector-ref a-vector c))))
 
-; Evaluates the game for horizontal results.
+; Returns the first element of lst that is not empty.
+(define (first-not-empty lst)
+  (if (empty? lst) empty (if (empty? (first lst)) (first-not-empty (rest lst)) (first lst))))
+
+; Evaluates the game for the specified list of triplets.
 ;
 ; Either returns the symbol of the winner or empty if no one won.
-(define (game-evaluate-horizontally a-game) 
-  (local
-    ((define state (game-state a-game)))
-    (cond
-      [(three-equal-symbols? state 0 1 2) (vector-ref state 0)]
-      [(three-equal-symbols? state 3 4 5) (vector-ref state 3)]
-      [(three-equal-symbols? state 6 7 8) (vector-ref state 6)]
-      [else empty])))
-
-(define (game-evaluate-vertically a-game) empty)
-(define (game-evaluate-diagonally a-game) empty)
+(define (game-evaluate-triplets a-game triplet-list)
+  (first-not-empty
+    (map
+      (lambda (triplet)
+        (if (three-equal-symbols? (game-state a-game) (first triplet) (second triplet) (third triplet))
+          (vector-ref (game-state a-game) (first triplet))
+          empty))
+      triplet-list)))
 
 ; Evaluates the game for results in all valid directions.
 ;
 ; Either returns the symbol of the winner or empty if no one won.
 (define (game-evaluate a-game)
-  (first-or-empty
-    (filter
-      (lambda (x) (not (empty? x)))
-      (list
-        (game-evaluate-horizontally a-game)
-        (game-evaluate-vertically a-game)
-        (game-evaluate-diagonally a-game)))))
+  (game-evaluate-triplets
+    a-game
+    (list
+      ; Horizontal lines
+      (list 0 1 2) (list 3 4 5) (list 6 7 8)
+      ; Vertical lines
+      (list 0 3 6) (list 1 4 7) (list 2 5 8)
+      ; Diagonal lines
+      (list 0 4 8) (list 2 4 6))))
 
 ; Returns whether or not the game is finished.
 (define (game-finished? a-game) (not (empty? (game-evaluate a-game))))
@@ -71,4 +70,4 @@
     game
     (solve (derive-games game))))
 
-(provide game)
+(provide game game-evaluate)
