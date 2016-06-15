@@ -21,6 +21,15 @@
 (check-equal? (game-evaluate (game (vector 'A empty empty empty empty empty empty empty empty))) empty)
 (check-equal? (game-evaluate (game (vector 'A 'A empty empty empty empty empty empty empty))) empty)
 
+; Victory of A
+(check-true (game-finished? (game (vector 'A 'B 'A 'A 'B 'B 'A 'A 'B))))
+; Victory of B
+(check-true (game-finished? (game (vector 'B 'A 'B 'B 'A 'A 'B 'B 'A))))
+; Draw
+(check-true (game-finished? (game (vector 'A 'B 'A 'B 'B 'A 'A 'A 'B))))
+; Unfinished
+(check-false (game-finished? (game (vector 'A 'B 'A 'B 'B 'A 'A 'A empty))))
+
 ; Horizontals
 (check-equal? (game-evaluate (game (vector 'A 'A 'A empty empty empty empty empty empty))) 'A)
 (check-equal? (game-evaluate (game (vector empty empty empty 'A 'A 'A empty empty empty))) 'A)

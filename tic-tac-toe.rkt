@@ -13,7 +13,6 @@
 (define (determine-next-to-play a-game)
   (if (> (count-plays a-game X-symb) (count-plays a-game O-symb)) O-symb X-symb))
 
-; Stub
 (define (derive-games-for-player a-game symb)
   (a-game))
 
@@ -61,13 +60,29 @@
       ; Diagonal lines
       (list 0 4 8) (list 2 4 6))))
 
+(define (game-won? a-game)
+  (not (empty? (game-evaluate a-game))))
+
+(define (game-full? a-game)
+  (zero? (vector-count empty? (game-state a-game))))
+
 ; Returns whether or not the game is finished.
-(define (game-finished? a-game) (not (empty? (game-evaluate a-game))))
+(define (game-finished? a-game)
+  ; For the game to be finished, there must be a winner or no more moves left.
+  (or (game-won? a-game) (game-full? a-game)))
 
-; Stub
-(define (solve game)
-  (if (game-finished? game)
-    game
-    (solve (derive-games game))))
+; (solve Game) -> Game
+;
+; Solves the provided Game. This results either in a draw or a victory for
+; whichever player had an advantage in the game.
+(define (solve a-game)
+  (if (game-finished? a-game)
+    a-game
+    ; If there is a derived game which is finishd, return it.
+    ; Otherwise, return any derived game.
+    (let*
+      ([solutions (map solve (derive-games game))]
+       [victories (filter game-won? solutions)])
+      (if (empty? victories) (first solutions) (first victories)))))
 
-(provide game game-evaluate)
+(provide game game-evaluate game-finished?)
