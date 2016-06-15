@@ -28,12 +28,31 @@
 (define (first-or-empty lst)
   (if (empty? lst) lst (car lst)))
 
-(define (game-evaluate-horizontally a-game) empty)
+; Checks if the positions a, b, and c of the vector are equal symbols.
+(define (three-equal-symbols? a-vector a b c)
+  ; Also check that these are symbols and not something else.
+  (and (symbol? (vector-ref a-vector a))
+       (equal? (vector-ref a-vector a) (vector-ref a-vector b))
+       (equal? (vector-ref a-vector b) (vector-ref a-vector c))))
+
+; Evaluates the game for horizontal results.
+;
+; Either returns the symbol of the winner or empty if no one won.
+(define (game-evaluate-horizontally a-game) 
+  (local
+    ((define state (game-state a-game)))
+    (cond
+      [(three-equal-symbols? state 0 1 2) (vector-ref state 0)]
+      [(three-equal-symbols? state 3 4 5) (vector-ref state 3)]
+      [(three-equal-symbols? state 6 7 8) (vector-ref state 6)]
+      [else empty])))
+
 (define (game-evaluate-vertically a-game) empty)
 (define (game-evaluate-diagonally a-game) empty)
 
-; Evaluates the game, returning either the symbol of the victorious side or
-; empty if the game is not finished yet.
+; Evaluates the game for results in all valid directions.
+;
+; Either returns the symbol of the winner or empty if no one won.
 (define (game-evaluate a-game)
   (first-or-empty
     (filter
@@ -44,8 +63,7 @@
         (game-evaluate-diagonally a-game)))))
 
 ; Returns whether or not the game is finished.
-; Stub
-(define (game-finished? a-game) #t)
+(define (game-finished? a-game) (not (empty? (game-evaluate a-game))))
 
 ; Stub
 (define (solve game)
