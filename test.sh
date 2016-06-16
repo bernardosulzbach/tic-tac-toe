@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-raco test .
+raco test test-tic-tac-toe.rkt
