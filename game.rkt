@@ -15,7 +15,6 @@
 
 (define (process-button-down world-state x y)
   (let ([index (index-from-mouse-click x y)])
-    (displayln (format "(~a, ~a) -> ~a" x y index))
     (if (empty? (vector-ref (game-state world-state) index))
       (game (vector-copy-and-replace (game-state world-state) index 'X))
       world-state)))
