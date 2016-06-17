@@ -1,4 +1,4 @@
-#lang racket
+#lang racket/gui
 
 (require 2htdp/image)
 (require 2htdp/universe)
@@ -25,13 +25,23 @@
     (process-button-down world-state x y)
     world-state))
 
+(define (restart-or-return-this state)
+  (if (should-restart? state) (make-empty-game) state))
+
 (define (process-player-action world-state x y event)
   (let
     ([new-state (process-mouse world-state x y event)])
     (if (equal? world-state new-state)
       world-state
       ; If the player made his move, let the computer play.
-      (play new-state))))
+      (if (game-finished? new-state)
+        (restart-or-return-this new-state)
+        (let
+          ([after-computer-state (play new-state)])
+          (if (game-finished? after-computer-state)
+            (restart-or-return-this after-computer-state)
+            after-computer-state))))))
+
 
 (define (draw-vertical-line scene x)
   (add-line scene x 0 x window-side default-line-color))
@@ -86,8 +96,23 @@
 (define (draw-game world-state)
   (draw-moves (empty-board) world-state))
 
+(define (get-end-game-message game)
+    (cond
+      [(equal? (game-evaluate game) 'O) "You lost. It's OK, the AI is perfect."]
+      [(equal? (game-evaluate game) 'X) "You won?! What?!"]
+      [else "You tied. Well done."]))
+
+(define (should-restart? world-state)
+  (equal? 1 (message-box/custom "The End" (get-end-game-message world-state) "Play Again" "Quit" #f)))
+
+; Evaluates if the Universe should stop, returns #t if the game is finished
+; (the player did not reset it).
+(define (should-stop? game)
+  (game-finished? game))
+
 (big-bang (make-empty-game)
           (name "Tic-tac-toe")
-          (stop-when game-finished?)
+          (stop-when should-stop?)
           (on-mouse process-player-action)
+          (close-on-stop true)
           (to-draw draw-game))
