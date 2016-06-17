@@ -102,3 +102,6 @@
 ;   X      X
 ;
 (check-equal? (play (game (vector 'X 'O 'X 'O 'O empty empty 'X empty))) (game (vector 'X 'O 'X 'O 'O 'X empty 'X empty)))
+
+(check-true (game-finished? (solve (make-empty-game))))
+(check-false (game-won? (solve (make-empty-game))))

@@ -27,16 +27,17 @@
 (define (game-to-string a-game)
   (apply format "~a ~a ~a\n~a ~a ~a\n~a ~a ~a" (map (lambda (s) (if (empty? s) " " s)) (vector->list (game-state a-game)))))
 
-(define (game-play-less-than? a b)
+; Compares two game moves to see if the first is less than the second.
+(define (game-move-less-than? a b)
   (cond
     [(and (empty? a) (empty? b)) false]
     [(empty? a) true]
     [(empty? b) false]
     [else (symbol<? a b)]))
 
-; Compares two games.
+; Compares two games to see if the first is less than the second.
 (define (game-less-than? a b)
-  (andmap game-play-less-than? (vector->list (game-state a)) (vector->list (game-state b))))
+  (andmap game-move-less-than? (vector->list (game-state a)) (vector->list (game-state b))))
 
 ; Counts how many times the specified symbol has played in the game.
 (define (count-plays a-game symb)
@@ -59,8 +60,6 @@
 (define (derive-games-for-player a-game symb)
   (list-games-after-replacing a-game symb (filter (lambda (i) (empty? (vector-ref (game-state a-game) i))) (range 9))))
 
-; (derive-games Game) -> (listof Game?)
-;
 ; Enumerates all games that may be derived from the specified game in a single
 ; turn.
 (define (derive-games game)
@@ -152,13 +151,14 @@
     a-game
     (solve (play a-game))))
 
-(provide game
-         make-empty-game
-         game-to-string
+(provide vector-copy-and-replace
+         game
          game-state
-         vector-copy-and-replace
+         game-to-string
          game-evaluate
          game-less-than?
+         game-won?
          game-finished?
+         make-empty-game
          play
          solve)
