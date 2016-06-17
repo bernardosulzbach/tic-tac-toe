@@ -17,6 +17,30 @@
 
 (struct game [state] #:transparent)
 
+; Creates and returns an empty game.
+(define (make-empty-game)
+  (game (make-vector 9 empty)))
+
+(define (sow-remaining lst v freq n)
+  (if (equal? freq n)
+    (cons v (sow-remaining lst v freq 0))
+    (if (empty? lst)
+      empty
+      (cons (first lst) (sow-remaining (rest lst) v freq (+ n 1))))))
+
+; Inserts v at every freq-th position of the list.
+(define (sow lst v freq)
+  (sow-remaining lst v freq 0))
+
+; Converts a game to a string.
+(define (game-to-string a-game)
+  (apply
+    string-append
+    (sow
+      (map
+        (lambda (s) (if (symbol? s) (symbol->string s) " "))
+        (vector->list (game-state a-game))) "\n" 3)))
+
 (define (game-play-less-than? a b)
   (cond
     [(and (empty? a) (empty? b)) false]
@@ -36,8 +60,12 @@
 (define (determine-next-to-play a-game)
   (if (> (count-plays a-game X-symb) (count-plays a-game O-symb)) O-symb X-symb))
 
+; Makes a copy of the input vector and replaces the element at pos by v before returning it.
+(define (vector-copy-and-replace vec pos v)
+  (vector-append (vector-take vec pos) (vector v) (vector-drop vec (+ pos 1))))
+
 (define (game-after-replacing a-game symb pos)
-  (game (vector-append (vector-take (game-state a-game) pos) (vector symb) (vector-drop (game-state a-game) (+ pos 1)))))
+  (game (vector-copy-and-replace (game-state a-game) pos symb)))
 
 (define (list-games-after-replacing a-game symb pos-list)
   (map (lambda (i) (game-after-replacing a-game symb i)) pos-list))
@@ -138,4 +166,13 @@
     a-game
     (solve (play a-game))))
 
-(provide game game-state game-evaluate game-less-than? game-finished? play solve)
+(provide game
+         make-empty-game
+         game-to-string
+         game-state
+         vector-copy-and-replace
+         game-evaluate
+         game-less-than?
+         game-finished?
+         play
+         solve)
