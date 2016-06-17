@@ -1,7 +1,8 @@
-# Tic Tac Toe
+# Tic-tac-toe
 
-This repository contains code for the popular paper-and-pencil game known as Tic
-Tac Toe (also known as Noughts and Crosses).
+This repository contains AI implementations for the popular paper-and-pencil
+game known as Tic-tac-toe. There is also a GUI-based game that allows the user
+to play against the computer.
 
 # Racket Code
 
@@ -20,5 +21,8 @@ The algorithm is an implementation of naïve minimax. The implementation is very
 slow due to the lack of optimizations. This may be fixed in the future.
 
 # Continuous Integration Status
+
+Travis CI provides continuous integration for this project. The badge on this
+section presents the build and test status of the master branch.
 
 [![Build Status](https://travis-ci.org/mafagafogigante/tic-tac-toe.svg?branch=master)](https://travis-ci.org/mafagafogigante/tic-tac-toe)
