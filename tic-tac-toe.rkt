@@ -21,25 +21,11 @@
 (define (make-empty-game)
   (game (make-vector 9 empty)))
 
-(define (sow-remaining lst v freq n)
-  (if (equal? freq n)
-    (cons v (sow-remaining lst v freq 0))
-    (if (empty? lst)
-      empty
-      (cons (first lst) (sow-remaining (rest lst) v freq (+ n 1))))))
-
-; Inserts v at every freq-th position of the list.
-(define (sow lst v freq)
-  (sow-remaining lst v freq 0))
-
-; Converts a game to a string.
+; Converts a game to a human-readable string.
+;
+; This string has two newline characters on it.
 (define (game-to-string a-game)
-  (apply
-    string-append
-    (sow
-      (map
-        (lambda (s) (if (symbol? s) (symbol->string s) " "))
-        (vector->list (game-state a-game))) "\n" 3)))
+  (apply format "~a ~a ~a\n~a ~a ~a\n~a ~a ~a" (map (lambda (s) (if (empty? s) " " s)) (vector->list (game-state a-game)))))
 
 (define (game-play-less-than? a b)
   (cond
