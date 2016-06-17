@@ -11,6 +11,12 @@
 (define pos-score 100.0)
 (define neg-score -100.0)
 
+; The factor by which future results are diminished. The score of an immediate
+; victory is pos-score. However, the score of a victory on the next turn is
+; only (* diminishing-factor pos-score). This is important to make the computer
+; attempt to win as soon as possible.
+(define diminishing-factor 0.9)
+
 (define X-symb 'X)
 (define O-symb 'O)
 (define tie-symb 'T)
@@ -105,7 +111,7 @@
     (cond
       [(equal? evaluation player) pos-score]
       [(equal? evaluation tie-symb) tie-score]
-      [(empty? evaluation) (list-mean (map (lambda (g) (calculate-game-score g player)) (derive-games a-game)))]
+      [(empty? evaluation) (list-mean (map (lambda (g) (* diminishing-factor (calculate-game-score g player))) (derive-games a-game)))]
       [else neg-score])))
 
 ; Evaluates the game for results in all valid directions.
