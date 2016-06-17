@@ -88,5 +88,6 @@
 
 (big-bang (make-empty-game)
           (name "Tic-tac-toe")
+          (stop-when game-finished?)
           (on-mouse process-player-action)
           (to-draw draw-game))
