@@ -2,14 +2,36 @@
 
 (require 2htdp/image)
 (require 2htdp/universe)
+
 (require "tic-tac-toe.rkt")
 
 (define window-side 600)
+(define tile-side (/ window-side 3))
+(define tile-fill-ratio 0.8)
+
+(define default-O-color 'Red)
+(define default-X-color 'Cornflowerblue)
 (define default-line-color 'Maroon)
 
+(define (process-button-down world-state x y)
+  (let ([index (index-from-mouse-click x y)])
+    (displayln (format "(~a, ~a) -> ~a" x y index))
+    (if (empty? (vector-ref (game-state world-state) index))
+      (game (vector-copy-and-replace (game-state world-state) index 'X))
+      world-state)))
+
 (define (process-mouse world-state x y event)
-  (when (equal? event "button-down") (displayln (format "(~a, ~a)" x y)))
-  world-state)
+  (if (equal? event "button-down")
+    (process-button-down world-state x y)
+    world-state))
+
+(define (process-player-action world-state x y event)
+  (let
+    ([new-state (process-mouse world-state x y event)])
+    (if (equal? world-state new-state)
+      world-state
+      ; If the player made his move, let the computer play.
+      (play new-state))))
 
 (define (draw-vertical-line scene x)
   (add-line scene x 0 x window-side default-line-color))
@@ -17,17 +39,54 @@
 (define (draw-horizontal-line scene y)
   (add-line scene 0 y window-side y default-line-color))
 
+(define (index-from-mouse-click x y)
+  (+ (* 3 (quotient y tile-side)) (quotient x tile-side)))
+
 (define (empty-board)
   ((compose
-     (lambda (scene) (draw-vertical-line scene (/ window-side 3)))
-     (lambda (scene) (draw-vertical-line scene (* 2 (/ window-side 3))))
-     (lambda (scene) (draw-horizontal-line scene (/ window-side 3)))
-     (lambda (scene) (draw-horizontal-line scene (* 2 (/ window-side 3))))) (empty-scene window-side window-side)))
+     (lambda (scene) (draw-vertical-line scene tile-side))
+     (lambda (scene) (draw-vertical-line scene (* 2 tile-side)))
+     (lambda (scene) (draw-horizontal-line scene tile-side))
+     (lambda (scene) (draw-horizontal-line scene (* 2 tile-side)))) (empty-scene window-side window-side)))
+
+(define (make-X)
+  (let
+    ([side (* tile-fill-ratio tile-side)])
+    (overlay
+      (line side side default-X-color)
+      (line (- side) side default-X-color))))
+
+(define (make-O)
+  (circle (* (/ tile-fill-ratio 2) tile-side) "outline" default-O-color))
+
+(define (image-from-move move)
+  (cond
+    [(equal? move 'X) (make-X)]
+    [(equal? move 'O) (make-O)]
+    [else empty-image]))
+
+(define (draw-move scene x-offset y-offset move)
+  (overlay/offset (image-from-move move) x-offset y-offset scene))
+
+(define (draw-line-of-moves scene y-offset list-of-moves)
+  (foldl
+    (lambda (x-offset move the-scene) (draw-move the-scene x-offset y-offset move))
+    scene
+    (list tile-side 0 (- tile-side))
+    list-of-moves))
+
+(define (draw-moves scene world-state)
+  (let ([board (vector->list (game-state world-state))])
+    (foldl
+      (lambda (y-offset list-of-moves the-scene) (draw-line-of-moves the-scene y-offset list-of-moves))
+      scene
+      (list tile-side 0 (- tile-side))
+      (list (take board 3) (drop (take board 6) 3) (drop board 6)))))
 
 (define (draw-game world-state)
-  (empty-board))
+  (draw-moves (empty-board) world-state))
 
 (big-bang (make-empty-game)
           (name "Tic-tac-toe")
-          (on-mouse process-mouse)
+          (on-mouse process-player-action)
           (to-draw draw-game))
