@@ -103,5 +103,11 @@
 ;
 (check-equal? (play (game (vector 'X 'O 'X 'O 'O empty empty 'X empty))) (game (vector 'X 'O 'X 'O 'O 'X empty 'X empty)))
 
+; An empty game should be in fact empty.
+(check-true (andmap empty? (vector->list (game-state (make-empty-game)))))
+
+; A solved game should be finished.
 (check-true (game-finished? (solve (make-empty-game))))
+
+; A perfectly played game of Tic Tac Toe should have no winners.
 (check-false (game-won? (solve (make-empty-game))))
