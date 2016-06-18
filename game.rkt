@@ -9,9 +9,13 @@
 (define tile-side (/ window-side 3))
 (define tile-fill-ratio 0.8)
 
-(define default-O-color 'Red)
+(define default-thickness 3)
+(define default-O-color 'Seagreen)
 (define default-X-color 'Cornflowerblue)
 (define default-line-color 'Maroon)
+(define default-O-pen (make-pen default-O-color default-thickness "solid" "round" "round"))
+(define default-X-pen (make-pen default-X-color default-thickness "solid" "round" "round"))
+(define default-line-pen (make-pen default-line-color default-thickness "solid" "round" "round"))
 
 (define (process-button-down world-state x y)
   (let ([index (index-from-mouse-click x y)])
@@ -41,12 +45,11 @@
             (restart-or-return-this after-computer-state)
             after-computer-state))))))
 
-
 (define (draw-vertical-line scene x)
-  (add-line scene x 0 x window-side default-line-color))
+  (add-line scene x 0 x window-side default-line-pen))
 
 (define (draw-horizontal-line scene y)
-  (add-line scene 0 y window-side y default-line-color))
+  (add-line scene 0 y window-side y default-line-pen))
 
 (define (index-from-mouse-click x y)
   (+ (* 3 (quotient y tile-side)) (quotient x tile-side)))
@@ -62,11 +65,11 @@
   (let
     ([side (* tile-fill-ratio tile-side)])
     (overlay
-      (line side side default-X-color)
-      (line (- side) side default-X-color))))
+      (line side side default-X-pen)
+      (line (- side) side default-X-pen))))
 
 (define (make-O)
-  (circle (* (/ tile-fill-ratio 2) tile-side) "outline" default-O-color))
+  (circle (* (/ tile-fill-ratio 2) tile-side) "outline" default-O-pen))
 
 (define (image-from-move move)
   (cond
