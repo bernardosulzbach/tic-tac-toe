@@ -2,7 +2,7 @@
 
 (require rackunit)
 (require "tic-tac-toe.rkt")
-(require/expose "tic-tac-toe.rkt" (count-plays list-mean derive-games derive-games-for-player))
+(require/expose "tic-tac-toe.rkt" (count-plays list-mean game-won? game-less-than? derive-games derive-games-for-player))
 
 (define-simple-check (check-equal-ignore-ordering? less-than? lst-a lst-b)
                      (equal? (sort lst-a less-than?) (sort lst-b less-than?)))
