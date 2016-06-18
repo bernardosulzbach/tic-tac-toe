@@ -28,7 +28,6 @@ env:
     - RACKET_VERSION=6.3
     - RACKET_VERSION=6.4
 
-
 # You may want to test against certain versions of Racket, without
 # having them count against the overall success/failure.
 matrix:
@@ -36,7 +35,6 @@ matrix:
   # its rows have failed, or, all of its rows that aren't allowed to
   # fail have succeeded.
   fast_finish: true
-
 
 before_install:
   - git clone https://github.com/greghendershott/travis-racket.git
@@ -51,9 +49,7 @@ before_script:
 #
 # Tip: Use `raco pkg install --deps search-auto <pkg>` to install any
 # required packages without getting stuck on a confirmation prompt.
-script:
-  - bash test.sh
-  - bash distribute.sh
+script: bash test.sh && bash distribute.sh
 
 # NOTE: If your repo is a Racket package with an info.rkt that
 # includes some `deps`, the following is more elegant:

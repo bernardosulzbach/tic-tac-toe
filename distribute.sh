@@ -10,4 +10,10 @@ rm game
 echo "Making a zipfile for the distribution..."
 zip -r tic-tac-toe tic-tac-toe
 rm -rf tic-tac-toe
-echo "Done!"
+if [ ! -f tic-tac-toe.zip ]; then
+    echo "Failed!"
+    exit 1
+else
+    echo "Done!"
+    exit 0
+fi
