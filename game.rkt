@@ -13,9 +13,9 @@
 (define default-O-color 'Seagreen)
 (define default-X-color 'Cornflowerblue)
 (define default-line-color 'Maroon)
-(define default-O-pen (make-pen default-O-color default-thickness "solid" "round" "round"))
-(define default-X-pen (make-pen default-X-color default-thickness "solid" "round" "round"))
-(define default-line-pen (make-pen default-line-color default-thickness "solid" "round" "round"))
+(define default-O-pen (make-pen default-O-color default-thickness "solid" "butt" "round"))
+(define default-X-pen (make-pen default-X-color default-thickness "solid" "butt" "round"))
+(define default-line-pen (make-pen default-line-color default-thickness "solid" "butt" "round"))
 
 (define (process-button-down world-state x y)
   (let ([index (index-from-mouse-click x y)])
