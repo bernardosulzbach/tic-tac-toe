@@ -53,6 +53,7 @@ before_script:
 # required packages without getting stuck on a confirmation prompt.
 script:
   - bash test.sh
+  - bash distribute.sh
 
 # NOTE: If your repo is a Racket package with an info.rkt that
 # includes some `deps`, the following is more elegant:
@@ -61,9 +62,7 @@ script:
 # - cd ..   # Travis did a cd into the dir. Back up, for the next:
 # - raco pkg install --deps search-auto --link <pkg>
 # - raco test -x -p <pkg>
-
 after_script:
-  - bash distribute.sh
 
 deploy:
   provider: releases
