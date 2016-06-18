@@ -17,6 +17,8 @@ This should be as simple as
 $ racket game.rkt
 ```
 
+[![http://i.imgur.com/3UQMJMC.png](http://i.imgur.com/3UQMJMC.png)](https://github.com/mafagafogigante/tic-tac-toe/releases/latest)
+
 The algorithm is an implementation of naïve minimax. The implementation is very
 slow due to the lack of optimizations. This may be fixed in the future.
 
