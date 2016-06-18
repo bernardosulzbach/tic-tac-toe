@@ -113,5 +113,4 @@
           (name "Tic-tac-toe")
           (stop-when should-stop?)
           (on-mouse process-player-action)
-          (close-on-stop true)
           (to-draw draw-game))
