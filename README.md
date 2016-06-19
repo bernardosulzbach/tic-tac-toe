@@ -2,7 +2,8 @@
 
 This repository contains AI implementations for the popular paper-and-pencil
 game known as Tic-tac-toe. There is also a GUI-based game that allows the user
-to play against the computer.
+to play against the computer. [There is also a blog post about this project]
+(http://www.mafagafogigante.org/tic-tac-toe-using-racket/).
 
 # Racket Code
 
@@ -17,7 +18,9 @@ This should be as simple as
 $ racket game.rkt
 ```
 
-[![http://i.imgur.com/3UQMJMC.png](http://i.imgur.com/yLMuDUv.png)](https://github.com/mafagafogigante/tic-tac-toe/releases/latest)
+<p align="center">
+  <img src="http://i.imgur.com/yLMuDUv.png" alt="Game Screenshot">
+</p>
 
 The algorithm is an implementation of naïve minimax. The implementation is very
 slow due to the lack of optimizations. This may be fixed in the future.
