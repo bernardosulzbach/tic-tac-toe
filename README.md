@@ -18,7 +18,9 @@ This should be as simple as
 $ racket game.rkt
 ```
 
-<img src='http://i.imgur.com/yLMuDUv.png' alt='Game Screenshot' style='display: block; text-align: center;'>
+<p align="center">
+  <img src="http://i.imgur.com/yLMuDUv.png" alt="Game Screenshot">
+</p>
 
 The algorithm is an implementation of naïve minimax. The implementation is very
 slow due to the lack of optimizations. This may be fixed in the future.
