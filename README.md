@@ -3,7 +3,7 @@
 This repository contains AI implementations for the popular paper-and-pencil
 game known as Tic-tac-toe. There is also a GUI-based game that allows the user
 to play against the computer. [There is also a blog post about this project]
-(http://www.mafagafogigante.org/tic-tac-toe-using-racket/).
+(http://www.bernardosulzbach.com/tic-tac-toe-using-racket/).
 
 # Racket Code
 
@@ -22,12 +22,11 @@ $ racket game.rkt
   <img src="http://i.imgur.com/yLMuDUv.png" alt="Game Screenshot">
 </p>
 
-The algorithm is an implementation of naïve minimax. The implementation is very
-slow due to the lack of optimizations. This may be fixed in the future.
+The algorithm is a naïve implementation of minimax.
 
 # Continuous Integration Status
 
+[![Build Status](https://travis-ci.org/bernardosulzbach/tic-tac-toe.svg?branch=master)](https://travis-ci.org/bernardosulzbach/tic-tac-toe)
+
 Travis CI provides continuous integration for this project. The badge on this
 section presents the build and test status of the master branch.
-
-[![Build Status](https://travis-ci.org/mafagafogigante/tic-tac-toe.svg?branch=master)](https://travis-ci.org/mafagafogigante/tic-tac-toe)
